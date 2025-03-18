@@ -1,6 +1,4 @@
 {
-	http_port 8080
-	https_port 8443
 	admin 127.0.0.1:9707
 }
 
