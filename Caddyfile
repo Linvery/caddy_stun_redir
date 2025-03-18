@@ -1,19 +1,12 @@
 {
-	http_port 80
-	https_port 443
+	http_port 8080
+	https_port 8443
 	admin 127.0.0.1:9707
 }
 
-http://fntv.nas.com:5666 {
+{fntv_domain} {
 	reverse_proxy {replace_url}
 	handle /v/media/* {
-		redir http://{replace_url}{uri} 302
-	}
-}
-
-http://fntv.nas.com:5666 {
-	reverse_proxy {replace_url}
-	handle /v/media/* {
-		redir http://{replace_url}{uri} 302
+			redir http://{replace_url}{uri} 302
 	}
 }
