@@ -10,10 +10,3 @@ http://fntv.nas.com:5666 {
 		redir http://{replace_url}{uri} 302
 	}
 }
-
-http://fntv.nas.com:5666 {
-	reverse_proxy {replace_url}
-	handle /v/media/* {
-		redir http://{replace_url}{uri} 302
-	}
-}
