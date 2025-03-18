@@ -2,7 +2,7 @@
 
 ## 一、概要前提
 
-### 1、环境：
+### 1、环境
 
 * 硬件设备：家庭部署飞牛NAS系统（无公网IPv4，具备IPv6地址）
 * 软件服务：运行MoviePilot+飞牛影视套件
@@ -13,11 +13,11 @@
 - 传统IPv4中继ipv6方案存在带宽瓶颈（受限于VPS小水管）
 - 无法实现全平台（PC/移动/TV）无感直连体验
 
-### 3. 需求：
+### 3. 需求
 
 如何在客户端无v6的环境下，利用STUN打洞直连服务端，实现类似alist 302云盘的方案，同时支持PC/移动/TV客户端的无感stun访问。
 
-### 4. 前置准备：
+### 4. 前置准备
 
 * 域名：`nas.com`（需托管至Cloudflare）
 * 云服务器：腾讯/阿里云ECS（1核1G/200M带宽）
@@ -26,7 +26,7 @@
 ## 二、技术方案
 
 ```
-A[客户端] -->|STUN请求| B(Cloudflare Worker)
+    A[客户端] -->|STUN请求| B(Cloudflare Worker)
     B -->|返回STUN IPV4:PORT | A
     A -->|媒体流直连| C[NAS STUN地址]
     A -->|API/静态资源| D[VPS中转]
@@ -38,7 +38,7 @@ A[客户端] -->|STUN请求| B(Cloudflare Worker)
 
    参考链接：https://club.fnnas.com/forum.php?mod=viewthread&tid=6545
 
-   效果：假设当前stun得到161.2.3.4:47125，域名为stun.nas.com，当访问https://stun.nas.com跳转到http://161.2.3.4:47125
+   效果：假设当前stun得到161.2.3.4:47125，域名为stun.nas.com，当访问[https://stun.nas.com](https://stun.nas.com)跳转到[http://161.2.3.4:47125](http://161.2.3.4:47125)
 
    替代方案：内链通开源版 https://github.com/Linvery/lanjmp/tree/main
 ### 2. VPS上部署caddystun.py脚本实现仅媒体流路径302跳转
@@ -108,8 +108,9 @@ A[客户端] -->|STUN请求| B(Cloudflare Worker)
 
 ## 四、效果验证以及技术分析
 
-### 1. 客户端访问地址：`http://fntv.nas.com:5666`
-### 2. 流量：
+### 1. 客户端访问地址：
+    `http://fntv.nas.com:5666`
+### 2. 流量
 
    * API请求：通过VPS中转（181.2.3.4）
    * 媒体流（/v/media/\*）：302重定向直连NAS STUN IPv4
@@ -120,7 +121,7 @@ A[客户端] -->|STUN请求| B(Cloudflare Worker)
    [媒体流量] STUN直连（节省VPS带宽）
    ```
 
-### 4、技术分析：
+### 4、技术分析
    仓库里有两个文件，caddystun.py负责通过request获取第一步stun.nas.com 302跳转的stun ip:port，然后在动态修改CaddyFile配置，实现分流，截取示例如下：
 
   ```
